@@ -1,3 +1,4 @@
+
 package edu.upc.dsa.dsa_error404_android;
 
 import com.google.gson.annotations.SerializedName;
@@ -13,30 +14,75 @@ public class User {
     @SerializedName("password")
     private String password;
 
+    @SerializedName("email")
+    private String email;
+
     @SerializedName("vidaInicial")
     private int vidaInicial;
 
     @SerializedName("monedas")
     private int monedas;
 
-    public User(String name, String password) {
-        this.username = name;
+    // Constructor vacío
+    public User() {
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public String getId() {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Este es el método clave para arreglar tus errores en rojo
+    public String getNombre() {
+        return username;
+    }
+
+    public void setNombre(String username) {
+        this.username = username;
+    }
+
     public String getName() {
         return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getVidaInicial() {
         return vidaInicial;
     }
 
+    public void setVidaInicial(int vidaInicial) {
+        this.vidaInicial = vidaInicial;
+    }
+
     public int getMonedas() {
         return monedas;
+    }
+
+    public void setMonedas(int monedas) {
+        this.monedas = monedas;
     }
 }
