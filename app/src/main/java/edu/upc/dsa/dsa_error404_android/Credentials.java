@@ -4,13 +4,16 @@ public class Credentials {
 
     private String nombre;
     private String password;
+    private String email; // 1. Nuevo campo añadido
 
     public Credentials() {
     }
 
-    public Credentials(String nombre, String password) {
+    // 2. Constructor actualizado para incluir el email
+    public Credentials(String nombre, String password, String email) {
         this.nombre = nombre;
         this.password = password;
+        this.email = email;
     }
 
     public String getNombre() {
@@ -27,5 +30,14 @@ public class Credentials {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    // 3. Nuevos Getter y Setter para el email
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
