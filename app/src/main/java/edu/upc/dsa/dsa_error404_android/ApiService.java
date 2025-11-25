@@ -10,4 +10,7 @@ public interface ApiService {
 
     @POST("game/users/login")
     Call<User> loginUser(@Body Credentials credentials);
+
+    @POST("game/users/objects/buy")
+    Call<User> comprarItem(@Body Credentials credentials);
 }

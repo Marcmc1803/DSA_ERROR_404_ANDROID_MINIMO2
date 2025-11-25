@@ -24,10 +24,11 @@ import edu.upc.dsa.dsa_error404_android.User;
 import edu.upc.dsa.dsa_error404_android.Credentials;
 
 public class SignupActivity extends AppCompatActivity {
-    EditText etUsuari, etPassword;
+    EditText etUsuari, etEmail, etPassword, etPassword2;
     Button btnSignUp, btnBackToMain;
     ApiService apiService;
 
+    //public static final String BASE_URL = "https://dsa4.upc.edu/register.html";
     public static final String BASE_URL = "http://10.0.2.2:8080/dsaApp/";
 
     @Override
@@ -42,7 +43,9 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         etUsuari = findViewById(R.id.editUsuari);
+        etEmail = findViewById(R.id.editEmail);
         etPassword = findViewById(R.id.EditPassword);
+        etPassword2 = findViewById(R.id.editPassword2);
         btnSignUp = findViewById(R.id.SignUp);
         btnBackToMain = findViewById(R.id.btnBackToMain);
 
@@ -72,16 +75,31 @@ public class SignupActivity extends AppCompatActivity {
 
     private void handleSignUp() {
         String usuari = etUsuari.getText().toString();
+        String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
+        String password2 = etPassword2.getText().toString();
 
-        if (usuari.isEmpty() || password.isEmpty()) {
+        if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || password2.isEmpty()) {
             Toast.makeText(this, "Datos incorrectos.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+
+        if (!email.matches(emailRegex)) {
+            Toast.makeText(this,"El formato del correo no es válido.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!password.equals(password2)){
+            Toast.makeText(this, "Contraseñas incorrectos.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         Credentials credentials = new Credentials();
         credentials.setNombre(usuari);
         credentials.setPassword(password);
+        credentials.setEmail(email);
 
         Call<User> call = apiService.registerUser(credentials);
 
