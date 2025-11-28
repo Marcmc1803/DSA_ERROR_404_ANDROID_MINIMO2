@@ -50,18 +50,18 @@ public class SignupActivity extends AppCompatActivity {
         String repeatPassword = etRepeatPassword.getText().toString();
 
         if (usuari.isEmpty() || email.isEmpty() || password.isEmpty() || repeatPassword.isEmpty()) {
-            Toast.makeText(this, "Omple tots els camps.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Completa todos los campos.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
         if (!email.matches(emailRegex)) {
-            Toast.makeText(this, "El format del correu no és vàlid.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "El formato del correo no es valido.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (!password.equals(repeatPassword)) {
-            Toast.makeText(this, "Les contrasenyes no coincideixen.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Las contraseñas no coinciden.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -79,22 +79,22 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(SignupActivity.this, "Usuari registrat! Ja pots iniciar sessió.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignupActivity.this, "Usuario registrado! Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show();
                     finish();
                 }
                 else if (response.code() == 409) {
-                    Log.e("SignupActivity", "Usuari ja existeix: " + response.code());
-                    Toast.makeText(SignupActivity.this, "Error: L'usuari ja existeix.", Toast.LENGTH_LONG).show();
+                    Log.e("SignupActivity", "El usuario ya existe. " + response.code());
+                    Toast.makeText(SignupActivity.this, "Error: El usuario ya existe.", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    Log.e("SignupActivity", "Error desconegut: " + response.code());
-                    Toast.makeText(SignupActivity.this, "Error desconegut en el registre.", Toast.LENGTH_LONG).show();
+                    Log.e("SignupActivity", "Error desconocido: " + response.code());
+                    Toast.makeText(SignupActivity.this, "Error desconocido en el registro.", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(SignupActivity.this, "Fallo de connexió: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(SignupActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("SignupActivity", "Error onFailure", t);
             }
         });
