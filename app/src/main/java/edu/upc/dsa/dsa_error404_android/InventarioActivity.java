@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;import android.util.Log;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +26,7 @@ public class InventarioActivity extends AppCompatActivity {
     RecyclerView recyclerViewInventario;
     InventarioAdapter adapter;
     Button btnVolverAlMenu;
+    ProgressBar PB;
 
     ApiService apiService;
     SharedPreferences sharedPreferences;
@@ -37,6 +39,7 @@ public class InventarioActivity extends AppCompatActivity {
 
         recyclerViewInventario = findViewById(R.id.recyclerViewInventario);
         btnVolverAlMenu = findViewById(R.id.btnVolverAlMenu);
+        PB = findViewById(R.id.progressBar);
 
         sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
         apiService = RetrofitClient.getInstance().getMyApi();
@@ -63,10 +66,13 @@ public class InventarioActivity extends AppCompatActivity {
             return;
         }
 
+        ProgressBarActivity.show(PB);
+
         Call<List<GameObject>> call = apiService.getUserObjects(username);
         call.enqueue(new Callback<List<GameObject>>() {
             @Override
             public void onResponse(Call<List<GameObject>> call, Response<List<GameObject>> response) {
+                ProgressBarActivity.hide(PB);
                 if (response.isSuccessful() && response.body() != null) {
                     List<GameObject> objetos = response.body();
                     if (objetos.isEmpty()) {
@@ -82,6 +88,8 @@ public class InventarioActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<GameObject>> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Log.e("InventarioActivity", "Fallo de red al cargar inventario", t);
                 Toast.makeText(InventarioActivity.this, "Fallo de conexión", Toast.LENGTH_SHORT).show();
             }

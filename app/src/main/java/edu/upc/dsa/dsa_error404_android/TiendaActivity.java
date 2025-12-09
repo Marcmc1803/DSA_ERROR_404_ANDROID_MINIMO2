@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class TiendaActivity extends AppCompatActivity {
     RecyclerView recyclerViewTienda;
     TiendaAdapter adapter;
     SharedPreferences sharedPreferences;
+    ProgressBar PB;
 
     ApiService apiService;
 
@@ -58,6 +60,7 @@ public class TiendaActivity extends AppCompatActivity {
         tvMonedas = findViewById(R.id.textViewMonedas);
         recyclerViewTienda = findViewById(R.id.recyclerViewTienda);
         recyclerViewTienda.setLayoutManager(new LinearLayoutManager(this));
+        PB = findViewById(R.id.progressBar);
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -90,11 +93,15 @@ public class TiendaActivity extends AppCompatActivity {
             return;
         }
 
+        ProgressBarActivity.show(PB);
+
         Call<User> call = apiService.getUser(username);
 
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                ProgressBarActivity.hide(PB);
+
                 if (response.isSuccessful() && response.body() != null) {
                     User usuarioActualizado = response.body();
 
@@ -113,6 +120,8 @@ public class TiendaActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Log.e("TiendaActivity", "Fallo de red al cargar datos del usuario.", t);
                 Toast.makeText(TiendaActivity.this, "Fallo de conexión. Mostrando datos locales.", Toast.LENGTH_SHORT).show();
                 actualizarMonedasUI();
@@ -121,10 +130,14 @@ public class TiendaActivity extends AppCompatActivity {
     }
 
     private void cargarTienda() {
+        ProgressBarActivity.show(PB);
+
         Call<List<GameObject>> call = apiService.getALLGameObjects();
         call.enqueue(new Callback<List<GameObject>>() {
             @Override
             public void onResponse(Call<List<GameObject>> call, Response<List<GameObject>> response) {
+                ProgressBarActivity.hide(PB);
+
                 if (response.isSuccessful() && response.body() != null) {
                     List<GameObject> objetos = response.body();
 
@@ -143,6 +156,8 @@ public class TiendaActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<GameObject>> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Toast.makeText(TiendaActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("TiendaActivity", "Error en onFailure al cargar tienda", t);
             }
@@ -165,11 +180,15 @@ public class TiendaActivity extends AppCompatActivity {
 
         CompraRequest request = new CompraRequest(username, objectId);
 
+        ProgressBarActivity.show(PB);
+
         Call<Void> call = apiService.comprarItem(request);
 
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                ProgressBarActivity.hide(PB);
+
                 if (response.isSuccessful()) {
                     Toast.makeText(TiendaActivity.this, item.getNombre() + " comprado con éxito!", Toast.LENGTH_SHORT).show();
 
@@ -197,6 +216,8 @@ public class TiendaActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Toast.makeText(TiendaActivity.this, "Fallo de conexión:: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("TiendaActivity", "Error en onFailure al comprar", t);
             }

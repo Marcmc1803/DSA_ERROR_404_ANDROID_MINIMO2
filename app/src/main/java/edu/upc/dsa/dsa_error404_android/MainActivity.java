@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,9 @@ public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     Button signupButton;
+    ProgressBar PB;
+    Button testButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,21 @@ public class MainActivity extends AppCompatActivity {
 
         loginButton = findViewById(R.id.Login);
         signupButton = findViewById(R.id.Singup);
+        PB = findViewById(R.id.progressBar);
+
+        //Para probar la barra de progreso.
+        //Se puede eliminar cuando se vaya a la version final.
+        testButton = findViewById(R.id.testButton);
+
+        testButton.setOnClickListener(v -> {
+            ProgressBarActivity.show(PB);
+
+            // Simulamos una "carga" de 2 segundos
+            new android.os.Handler().postDelayed(() -> {
+                ProgressBarActivity.hide(PB);
+            }, 2000);
+        });
+        //HAsta aqui
 
         loginButton.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);

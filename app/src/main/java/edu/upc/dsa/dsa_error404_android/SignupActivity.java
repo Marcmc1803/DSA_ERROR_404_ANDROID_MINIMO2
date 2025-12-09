@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class SignupActivity extends AppCompatActivity {
     ApiService apiService;
     boolean showPass1 = false;
     boolean showPass2 = false;
+    ProgressBar PB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.SignUp);
         btnBackToMain = findViewById(R.id.btnBackToMain);
         apiService = RetrofitClient.getInstance().getMyApi();
+        PB = findViewById(R.id.progressBar);
 
         btnSignUp.setOnClickListener(v -> handleSignUp());
         btnBackToMain.setOnClickListener(v -> {
@@ -109,9 +112,13 @@ public class SignupActivity extends AppCompatActivity {
         credentials.setEmail(emailMinuscula);
         credentials.setPassword(password);
 
+        ProgressBarActivity.show(PB);
+
         Call<User> call = apiService.registerUser(credentials);
         call.enqueue(new Callback<User>() {
             @Override public void onResponse(Call<User> call, Response<User> response) {
+                ProgressBarActivity.hide(PB);
+
                 if (response.isSuccessful()) {
                     Toast.makeText(SignupActivity.this, "Usuario registrado! Ya puedes iniciar sesión.", Toast.LENGTH_LONG).show();
                     finish();
@@ -122,6 +129,8 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
             @Override public void onFailure(Call<User> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Toast.makeText(SignupActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

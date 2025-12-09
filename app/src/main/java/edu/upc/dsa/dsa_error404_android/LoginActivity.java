@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText etUsername, etPassword;
     Button btnLogin, btnBackToMain;
     ApiService apiService;
+    ProgressBar PB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLoginSubmit);
         btnBackToMain = findViewById(R.id.btnBackToMain);
+        PB = findViewById(R.id.progressBar);
 
         apiService = RetrofitClient.getInstance().getMyApi();
 
@@ -57,10 +61,14 @@ public class LoginActivity extends AppCompatActivity {
         credentials.setNombre(inputMinuscula);
         credentials.setPassword(password);
 
+        ProgressBarActivity.show(PB);
+
         Call<User> call = apiService.loginUser(credentials);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
+                ProgressBarActivity.hide(PB);
+
                 if (response.isSuccessful()) {
 
                     User user = response.body();
@@ -87,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                ProgressBarActivity.hide(PB);
+
                 Toast.makeText(LoginActivity.this, "Fallo de conexión: " + t.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e("LoginActivity", "Error onFailure", t);
             }
