@@ -14,11 +14,17 @@ import androidx.core.view.WindowInsetsCompat;
 import android.content.SharedPreferences;
 import android.content.Context;
 
+// Importar SessionManager para asegurar la limpieza de la sesión al desloguearse
+// Asumo que SessionManager está en el paquete principal si no usas la carpeta 'util'
+// import edu.upc.dsa.dsa_error404_android.SessionManager;
+
+
 public class InicioLoginActivity extends AppCompatActivity {
 
     Button buttonTienda;
     Button buttonLogOut;
     Button buttonInventario;
+    Button btnJoinGroup; // <-- NUEVA DECLARACIÓN
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,20 +39,27 @@ public class InicioLoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        // =======================================================
+        // Botón TIENDA
+        // =======================================================
         buttonTienda = findViewById(R.id.buttonTienda);
-
         buttonTienda.setOnClickListener(v -> {
             Intent intent = new Intent(InicioLoginActivity.this, TiendaActivity.class);
             startActivity(intent);
         });
 
+        // =======================================================
+        // Botón LOGOUT
+        // =======================================================
         buttonLogOut = findViewById(R.id.buttonLogOut);
-
         buttonLogOut.setOnClickListener(v -> {
             SharedPreferences sharedPreferences = getSharedPreferences("user_credentials", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
+
+            // Limpiar también la sesión del SessionManager (si lo tienes)
+            // SessionManager.clearSession(InicioLoginActivity.this);
 
             Intent intent = new Intent(InicioLoginActivity.this, MainActivity.class);
 
@@ -56,10 +69,22 @@ public class InicioLoginActivity extends AppCompatActivity {
             finish();
         });
 
+        // =======================================================
+        // Botón INVENTARIO
+        // =======================================================
         buttonInventario = findViewById(R.id.buttonInventario);
-
         buttonInventario.setOnClickListener(v -> {
             Intent intent = new Intent(InicioLoginActivity.this, InventarioActivity.class);
+            startActivity(intent);
+        });
+
+        // =======================================================
+        // NUEVA FUNCIONALIDAD EJ3: Unirse a Grupo
+        // =======================================================
+        btnJoinGroup = findViewById(R.id.btnJoinGroup); // <-- Inicialización
+        btnJoinGroup.setOnClickListener(v -> {
+            // Lanza la Activity de listado de grupos
+            Intent intent = new Intent(InicioLoginActivity.this, GroupListActivity.class);
             startActivity(intent);
         });
     }

@@ -14,6 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DSA_Error404_Android"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".GroupListActivity"
+            android:label="Unirse a Grupo"
+            android:exported="false" />
+
         <activity
             android:name=".InventarioActivity"
             android:exported="false" />

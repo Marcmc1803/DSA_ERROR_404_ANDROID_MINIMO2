@@ -9,6 +9,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+
+
 public interface ApiService {
     @POST("game/users/register")
     Call<User> registerUser(@Body Credentials credentials);
@@ -28,4 +30,10 @@ public interface ApiService {
     @GET("game/users/objects/list")
     Call<List<GameObject>> getUserObjects(@Query("nombre") String nombre);
 
+    @GET("game/groups")
+    Call<List<Group>> getAllGroups();
+
+
+    @POST("game/groups/join")
+    Call<Void> joinGroup(@Body JoinGroupRequest request);
 }
